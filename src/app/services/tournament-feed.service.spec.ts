@@ -4,13 +4,22 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { TournamentFeedService } from './tournament-feed.service';
 
 describe('TournamentFeedService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [TournamentFeedService]
-    });
-  });
+    let tournamentFeedService: TournamentFeedService;
 
-  it('should ...', inject([TournamentFeedService], (service: TournamentFeedService) => {
-    expect(service).toBeTruthy();
-  }));
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [TournamentFeedService]
+        });
+    });
+
+    beforeEach(inject([TournamentFeedService], (tfs: TournamentFeedService) => {
+        tournamentFeedService = tfs;
+    }));
+
+
+    it('should exist', () => {
+        expect(tournamentFeedService.getFeed).toBeDefined();
+    });
+
+
 });

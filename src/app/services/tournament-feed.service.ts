@@ -548,5 +548,4 @@ export class TournamentFeedService {
     getFeed(): Observable<any[]> {
         return Observable.of(this.tournaments);
     }
-
 }
