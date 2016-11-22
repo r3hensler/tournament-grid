@@ -1,0 +1,26 @@
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.grid .grid-cell {
+    display: block;
+    flex: 1;
+    flex-basis: 48%;
+    margin-bottom: 10px; 
+}
+
+@media only screen 
+    and (min-device-width: 1024px) {
+    .grid .grid-cell {
+        flex-basis: 32%;
+    }
+}
+
+@media only screen 
+    and (min-device-width: 1200px) {
+    .grid .grid-cell {
+        flex-basis: 24%;
+    }
+}
