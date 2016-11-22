@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 import { TournamentFeedService } from './tournament-feed.service';
 
 describe('TournamentFeedService', () => {
@@ -8,6 +9,7 @@ describe('TournamentFeedService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [HttpModule],
             providers: [TournamentFeedService]
         });
     });

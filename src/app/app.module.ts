@@ -17,7 +17,9 @@ import { TournamentFeedService } from './services/tournament-feed.service';
     FormsModule,
     HttpModule
   ],
-  providers: [TournamentFeedService],
+  providers: [
+    TournamentFeedService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

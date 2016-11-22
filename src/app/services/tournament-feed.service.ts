@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
+
+const BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
 
 @Injectable()
 export class TournamentFeedService {
 
-    constructor() { }
+    constructor(private http: Http) { }
 
     private tournaments = [
         {
@@ -545,7 +548,37 @@ export class TournamentFeedService {
         }
     ];
 
+    private tournaments$ = Observable.from(this.tournaments);
+
+    private geoUrls$ = this.tournaments$
+        .map((tournament: any) => {
+            let tournamentObj = { 
+                identifier: tournament.identifier,
+                location: undefined,
+                url: ""
+            };
+            let queryParam = tournament.city + " " + tournament.location;
+            tournamentObj.url = BASE_URL + encodeURIComponent(queryParam);
+            return tournamentObj;
+        })
+    private geolocations$ = this.geoUrls$
+        .first()
+        .flatMap((tournamentObj: any): Observable<any> => {
+            return this.http.get(tournamentObj.url)
+                .map((response: any) => response.json());
+            // return tournamentObj;
+        })
+        .map((respJson: any) => respJson.results)
+        .map((results: any[]) => results.slice(0, 1).pop())
+        .map((geoObj: any) => geoObj.geometry.location)
+        .subscribe((tournamentObj: any) => console.log(tournamentObj));
+
+    private sumTournaments$ = this.tournaments$
+        .scan((tournamentList: any[], tournament: any) => {
+            return [...tournamentList, tournament];
+        }, []);
+
     getFeed(): Observable<any[]> {
-        return Observable.of(this.tournaments);
+        return this.sumTournaments$;
     }
 }

@@ -1,5 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -18,16 +19,20 @@ class MockTournamentFeedService {
         return Observable.of(mockFeed);
     }
 }
+
 describe('GridContainerComponent', () => {
     let component: GridContainerComponent;
     let fixture: ComponentFixture<GridContainerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            providers: [{
-                 provide: TournamentFeedService, 
-                 useClass: MockTournamentFeedService
-            }],
+            imports: [HttpModule],
+            providers: [
+                {
+                    provide: TournamentFeedService, 
+                    useClass: MockTournamentFeedService
+                }
+            ],
             declarations: [GridContainerComponent]
         })
             .compileComponents();
