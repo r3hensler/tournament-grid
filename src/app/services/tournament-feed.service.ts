@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { STATIC_TOURNAMENTS } from '../models/static-tournament';
 
 export const GEOLOCATION_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+export const TEMPERATURE_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
 
 @Injectable()
 export class TournamentFeedService {
@@ -20,17 +21,19 @@ export class TournamentFeedService {
                 identifier: tournament.identifier,
                 location: undefined,
                 startDate: tournament.startDate,
+                temperature: undefined,
                 tournamentName: tournament.tournamentName,
-                url: ""
+                geoUrl: "",
+                tempUrl: ""
             };
             let queryParam = tournament.city + " " + tournament.location;
-            tournamentObj.url = GEOLOCATION_BASE_URL + encodeURIComponent(queryParam);
+            tournamentObj.geoUrl = GEOLOCATION_BASE_URL + encodeURIComponent(queryParam);
             return tournamentObj;
         });
 
     private geolocations$ = this.geoUrls$
         .flatMap((tournamentObj: any): Observable<any> => {
-            return this.http.get(tournamentObj.url)
+            return this.http.get(tournamentObj.geoUrl)
                 .filter((response: any) => response !== undefined)
                 .map((response: any) => response.json())
                 .map((respJson: any) => respJson.results)
@@ -43,7 +46,23 @@ export class TournamentFeedService {
                 });
         });
 
-    private combineLocations$ = this.geolocations$.concat(this.geoUrls$)
+    private temperature$ = this.geolocations$
+        .flatMap((tournamentObj: any) => {
+            let lat = tournamentObj.location.lat;
+            let lon = tournamentObj.location.lng;
+            tournamentObj.tempUrl = TEMPERATURE_BASE_URL + 'lat=' + lat + '&lon=' + lon + '&APPID=e57810fe42b72a89442a25832b5ce023';
+            return this.http.get(tournamentObj.tempUrl)
+                .filter((response: any) => response !== undefined)
+                .map((response: any) => response.json())
+                .filter((respJson: any) => respJson.main !== undefined)
+                .map((respJson: any) => parseInt(respJson.main.temp, 10) - 273)
+                .map((temp: number) => {
+                    tournamentObj.temperature = temp.toString() + 'C';
+                    return tournamentObj;
+                });
+        });
+
+    private combineLocations$ = this.temperature$.concat(this.geoUrls$)
         .distinct((tournamentObj1: any, tournamentObj2: any) => 
             tournamentObj1.identifier === tournamentObj2.identifier);
 
