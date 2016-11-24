@@ -19,5 +19,4 @@ export class GridContainerComponent implements OnInit {
 
     ngOnInit() {
     }
-
 }

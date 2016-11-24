@@ -7,8 +7,8 @@ describe('tournament-grid App', function() {
     page = new TournamentGridPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display message saying Upcoming Tournaments', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('Upcoming Tournaments');
   });
 });

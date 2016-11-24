@@ -2,16 +2,34 @@
 
 import { TestBed, async } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
+import { Observable } from 'rxjs';
 
 import { AppComponent } from './app.component';
 import { GridContainerComponent } from './components/grid-container/grid-container.component';
 import { TournamentFeedService } from './services/tournament-feed.service';
 
+const mockFeed = [{
+    "city": "test city",
+    "tournamentName": "test tournament",
+    "startDate": "2016-11-22"
+}];
+
+class MockTournamentFeedService {
+    getFeed(): Observable<any[]> {
+        return Observable.of(mockFeed);
+    }
+}
+
 describe('AppComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpModule],
-            providers: [TournamentFeedService],
+            providers: [
+                {
+                    provide: TournamentFeedService, 
+                    useClass: MockTournamentFeedService
+                }
+            ],
             declarations: [
                 AppComponent,
                 GridContainerComponent
