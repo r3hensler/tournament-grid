@@ -1,26 +1,51 @@
 .grid {
+    background-color: rgba(0, 118, 92, 0.05);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    border: 1px solid #0076C0;
+    border-radius: 3px;
+    margin: 0;
+    padding: 1%;
 }
 
 .grid .grid-cell {
+    background-color: rgba(255, 255, 255, 0.75);
     display: block;
     flex: 1;
-    flex-basis: 48%;
-    margin-bottom: 10px; 
+    flex-basis: 42%;
+    border: 1px solid #0076C0;
+    margin: 1%;
+    max-width: 48%;
+    padding: 0 0 2%;
+}
+
+.grid-cell div {
+    margin: 0 10px;
+}
+
+.grid-cell .tournament {
+    background-color: rgba(0, 118, 92, 0.75);
+    color: #fff;
+    font-weight: bold;
+    height: 2.3em;
+    margin: 0 0 1%;
+    padding: 1% 10px;
 }
 
 @media only screen 
     and (min-device-width: 1024px) {
     .grid .grid-cell {
-        flex-basis: 32%;
+        flex-basis: 28%;
+        max-width: 31%;
+        padding: 0 0 1%;
     }
 }
 
 @media only screen 
     and (min-device-width: 1200px) {
     .grid .grid-cell {
-        flex-basis: 24%;
+        flex-basis: 20%;
+        max-width: 23%;
     }
 }

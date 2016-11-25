@@ -9,10 +9,40 @@ export const TEMPERATURE_BASE_URL = "http://api.openweathermap.org/data/2.5/weat
 
 const smallViewPort = window.matchMedia("(max-device-width: 640px)");
 
+const GreenYellowRed = (temp) => {
+    
+    let num: number,
+        redColor: number,
+        greenColor: number,
+        blueColor:number = 0;
+
+    if (temp < 0) {
+        num = 0;
+    } else if (temp >= 40) {
+        num = 99;
+    } else {
+        num = temp * 2.5;
+    }
+
+    if (num < 50) {
+        // green to yellow
+        redColor = Math.floor(255 * (num / 50));
+        greenColor = 255;
+
+    } else {
+        // yellow to red
+        redColor = 255;
+        greenColor = Math.floor(255 * ((50 - num % 50) / 50));
+    }
+
+    return `${redColor},${greenColor},${blueColor}`;
+};
+
 @Injectable()
 export class TournamentFeedService {
 
     constructor(private http: Http) {
+        console.log("RGB of 10", GreenYellowRed(10));
     }
 
     private tournaments$ = Observable.from(STATIC_TOURNAMENTS);
@@ -21,6 +51,7 @@ export class TournamentFeedService {
         .map((tournament: any) => {
             let tournamentObj = {
                 city: tournament.city,
+                colour: undefined,
                 identifier: tournament.identifier,
                 location: undefined,
                 startDate: tournament.startDate,
@@ -61,13 +92,14 @@ export class TournamentFeedService {
                 .filter((respJson: any) => respJson.main !== undefined)
                 .map((respJson: any) => parseInt(respJson.main.temp, 10) - 273)
                 .map((temp: number) => {
+                    tournamentObj.colour = GreenYellowRed(temp);
                     tournamentObj.temperature = temp.toString() + 'C';
                     return tournamentObj;
                 });
         });
 
     private combineLocations$ = this.temperature$.concat(this.geoUrls$)
-        .distinct((tournamentObj1: any, tournamentObj2: any) => 
+        .distinct((tournamentObj1: any, tournamentObj2: any) =>
             tournamentObj1.identifier === tournamentObj2.identifier);
 
     private sumTournaments$ = this.combineLocations$

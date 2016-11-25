@@ -1,8 +1,9 @@
 <ul class="grid">
     <li 
         *ngFor="let tournament of tournaments"
-        class="grid-cell">
-        <div>{{ tournament.tournamentName }}</div>
+        class="grid-cell"
+        [style]="changeBackground(tournament.colour)">
+        <div class="tournament">{{ tournament.tournamentName }}</div>
         <div>{{ tournament.city }}</div>
         <div>{{ tournament.startDate }}</div>
         <div>{{ tournament.temperature }}</div>
