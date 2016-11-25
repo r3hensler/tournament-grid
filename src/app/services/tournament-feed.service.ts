@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { STATIC_TOURNAMENTS } from '../models/static-tournament';
 
 export const GEOLOCATION_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-export const TEMPERATURE_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
+export const TEMPERATURE_BASE_URL = "//api.openweathermap.org/data/2.5/weather?"
 
 const smallViewPort = window.matchMedia("(max-device-width: 640px)");
 
